@@ -57,6 +57,7 @@ class RNFirebaseListView extends Component {
           style={styles.navbar}
           title="Todo List" />
         {/*A list view with our dataSource and a method to render each row*/}
+        {/*Allows lists to be empty, can be removed in future versions of react*/}
         <ListView
           dataSource={this.state.dataSource}
           enableEmptySections={true}
@@ -68,6 +69,7 @@ class RNFirebaseListView extends Component {
            onChangeText={(text) => this.setState({newTask: text})}
            placeholder="New Task"
          />
+        {/*The library has a bug so I removing the shadow to avoid it*/}
         <FloatingActionButton
           hideShadow={true}
           buttonColor="rgba(231,76,60,1)"
@@ -78,8 +80,12 @@ class RNFirebaseListView extends Component {
 
   _renderItem(task) {
     // a method for building each list item
+    const onTaskCompletion = () => {
+      // removes the item from the list
+      this.tasksRef.child(task._key).remove()
+    };
     return (
-      <ListItem task={task} />
+      <ListItem task={task} onTaskCompletion={onTaskCompletion} />
     );
   }
 
